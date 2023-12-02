@@ -10,7 +10,7 @@ import os
 import pygetwindow as gw
 import config
 from io import BytesIO
-from config import TOKEN, AUTHORIZED_ID
+from config import TOKEN, AUTHORIZED_ID, IGNORED_PROCESSES
 from datetime import datetime
 from telebot import types
 
@@ -19,7 +19,6 @@ AUTHORIZED_CHAT_ID = config.AUTHORIZED_ID
 mouse_blocked = False  # Флаг, указывающий, заблокирована ли мышь
 bot = telebot.TeleBot(TOKEN)
 
-IGNORED_PROCESSES = {'taskhostw.exe', 'TrustedInstaller.exe', 'sppsvc.exe', 'TiWorker.exe', 'audiodg.exe', 'fsnotifier.exe', 'QtWebEngineProcess.exe', 'RuntimeBroker.exe', 'backgroundTaskHost.exe', 'ApplicationFrameHost.exe', 'SystemSettings.exe', 'UserOOBEBroker.exe', 'amdow.exe', 'AMDRSServ.exe', 'cncmd.exe', 'clinfo.exe', 'RadeonSoftware.exe','TextInputHost.exe', 'AMDRSSrcExt.exe', 'powershell.exe', 'cmd.exe', 'WmiPrvSE.exe', '', 'dllhost.exe', 'CompPkgSrv.exe', 'SearchProtocolHost.exe', 'SearchFilterHost.exe', 'msedge.exe', 'python.exe', 'pingsender.exe', 'conhost.exe', 'svchost.exe'}
 RESTART_THRESHOLD = 1  # Порог перезапуска процесса, чтобы избежать множественных уведомлений
 restart_count = {}
 
