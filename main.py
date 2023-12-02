@@ -14,6 +14,7 @@ from config import TOKEN, AUTHORIZED_ID, IGNORED_PROCESSES
 from datetime import datetime
 from telebot import types
 
+IGNORED_PROCESSES = config.IGNORED_PROCESSES
 TOKEN = config.TOKEN
 AUTHORIZED_CHAT_ID = config.AUTHORIZED_ID
 mouse_blocked = False  # Флаг, указывающий, заблокирована ли мышь
