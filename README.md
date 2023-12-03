@@ -24,3 +24,23 @@ exit
 🖼️ /screenshot - делает скриншот рабочего стола
 💤 /off - выключает пк
 🚷 /off_devices - выключает клавиатуру и мышь до перезагрузки пк
+```
+
+# Много импортов
+
+```
+import ctypes
+import telebot
+import time
+import atexit
+import threading
+import pythoncom
+import wmi
+import pyautogui
+import os
+import pygetwindow as gw
+import config
+from io import BytesIO
+from config import TOKEN, AUTHORIZED_ID, IGNORED_PROCESSES
+from datetime import datetime
+from telebot import types
