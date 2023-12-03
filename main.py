@@ -1,4 +1,5 @@
 import ctypes
+import psutil
 import telebot
 import time
 import atexit
