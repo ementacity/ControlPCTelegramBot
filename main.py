@@ -7,6 +7,9 @@ from datetime import datetime
 from io import BytesIO
 import webbrowser
 
+import subprocess
+import platform
+import socket
 import psutil
 import pyautogui
 import pythoncom
@@ -32,7 +35,6 @@ bot = telebot.TeleBot(TOKEN)
 
 # Переменная для хранения состояния экрана (0 - выключен, 1 - включен)
 screen_state = 1
-
 
 def send_startup_message():
     start_time = datetime.now().strftime("%H:%M:%S")
@@ -101,6 +103,56 @@ def terminate_process(process_name):
             pid = process.info['pid']
             psutil.Process(pid).terminate()
 
+@bot.message_handler(commands=['stop'])
+def stop_bot(message):
+    if is_authorized(message.chat.id):
+        bot.send_message(message.chat.id, "❌ Бот остановлен.", reply_markup=types.ReplyKeyboardRemove())
+        os.abort()
+    else:
+        bot.send_message(message.chat.id, "🚷 У вас нет прав доступа к боту.", reply_markup=create_keyboard())
+
+@bot.message_handler(commands=['pc'])
+def pc_info(message):
+    # Информация о процессоре
+    cpu_info = platform.processor()
+
+    # Информация об оперативной памяти
+    ram_info = round(psutil.virtual_memory().total / (1024 ** 3), 2)
+
+    # Информация о диске
+    disk_info = psutil.disk_usage('/')
+    disk_total_gb = disk_info.total / (1024 ** 3)
+    disk_used_gb = disk_info.used / (1024 ** 3)
+    disk_percent_used = disk_info.percent
+
+    # Информация о сети
+    network_info = psutil.net_io_counters()
+    network_usage = (network_info.bytes_sent + network_info.bytes_recv) / (1024 ** 2)
+
+    # Информация о времени загрузки системы
+    boot_time_timestamp = psutil.boot_time()
+    boot_time = datetime.fromtimestamp(boot_time_timestamp)
+    current_time = datetime.now()
+    uptime = current_time - boot_time
+    boot_time_str = boot_time.strftime("%Y-%m-%d %H:%M:%S")
+    uptime_str = str(uptime).split('.')[0]
+
+    # Собираем сообщение
+    pc_message = (
+        f"💻 **Информация о компьютере**:\n\n"
+        f"🔧 **Процессор:** {cpu_info}\n"
+        f"📊 **Оперативная память:** {ram_info} GB\n"
+        f"💾 **Общий объем диска:** {disk_used_gb:.1f}/{disk_total_gb:.1f} GB ({disk_percent_used}%)\n\n"
+        f"🌐 **IP-адрес:** {socket.gethostbyname(socket.gethostname())}\n"
+        f"👤 **Пользователь:** {os.getlogin()}\n\n"
+        f"🔄 **Загрузка**:\n"
+        f"   - **Память:** {psutil.virtual_memory().percent}%\n"
+        f"   - **Сеть:** {network_usage:.2f} MB\n\n"
+        f"⏰ **Время загрузки ПК:** {boot_time_str}\n"
+        f"🕒 **Время работы:** {uptime_str}"
+    )
+
+    bot.send_message(message.chat.id, pc_message, parse_mode='Markdown')
 
 @bot.message_handler(commands=['terminate'])
 def handle_terminate(message):
@@ -131,15 +183,6 @@ def handle_url(message):
     else:
         bot.send_message(message.chat.id, "🚷 У вас нет прав доступа к боту.")
 
-
-@bot.message_handler(commands=['cid'])
-def handle_cid(message):
-    if is_authorized(message.chat.id):
-        bot.send_message(message.chat.id, f"💂‍♂️ Ваш chat_id: {message.chat.id}", reply_markup=create_keyboard())
-    else:
-        bot.send_message(message.chat.id, "🚷 У вас нет прав доступа к боту.")
-
-
 @bot.message_handler(commands=['error'])
 def handle_error(message):
     if is_authorized(message.chat.id):
@@ -162,6 +205,27 @@ def bring_window_to_front(window_title):
         pass
 
 
+@bot.message_handler(commands=['open'])
+def handle_open(message):
+    if is_authorized(message.chat.id):
+        try:
+            _, program_name = message.text.split(maxsplit=1)
+            program_name = program_name.strip()
+
+            # Запуск указанной программы
+            subprocess.Popen([program_name])
+
+            bot.send_message(message.chat.id, f"✅ Программа {program_name} успешно запущена.",
+                             reply_markup=create_keyboard())
+        except ValueError:
+            bot.send_message(message.chat.id, "❌ Укажите имя программы после команды /open.",
+                             reply_markup=create_keyboard())
+        except Exception as e:
+            error_message = f"❌ Произошла ошибка при выполнении команды /open: {e}"
+            bot.send_message(message.chat.id, error_message, reply_markup=create_keyboard())
+    else:
+        bot.send_message(message.chat.id, "🚷 У вас нет прав доступа к боту.", reply_markup=create_keyboard())
+
 @bot.message_handler(func=lambda message: message.text.lower() in ['/start', '⚙️ вывести команды'])
 def handle_start(message):
     if is_authorized(message.chat.id):
@@ -174,7 +238,10 @@ def handle_start(message):
             "🚷 /off_devices - выключает клавиатуру и мышь до перезагрузки.\n"
             "💠 /processes - выводит все процессы на пк.\n"
             "🌐 /url {ссылка} - открывает указанный сайт в браузере.\n"
-            "❌ /terminate {процесс} - убивает указанный процесс.\n"
+            "❌ /terminate {процесс} - убивает указанный процесс\n"
+            "✅ /open {название} - открывает указанную программу\n"
+            "💻 /pc - вся информация о подключенном пк\n"
+            "🚷 /stop - останавливает бота, отключает скрипт.\n"
         )
         bot.send_message(message.chat.id, welcome_message, reply_markup=create_keyboard())
     else:
