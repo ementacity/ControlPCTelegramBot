@@ -1,0 +1,5 @@
+psutil~=5.9.6
+PyAutoGUI~=0.9.54
+PyGetWindow~=0.0.9
+telebot~=0.0.5
+WMI~=1.5.1
