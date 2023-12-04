@@ -93,7 +93,8 @@ def create_keyboard():
     offdevices_button = types.KeyboardButton('❌ Выключить клавиатуру и мышь (до перезагрузки)')
     info_button = types.KeyboardButton('⚙️ Вывести команды')
     processes_button = types.KeyboardButton('💠 Процессы')
-    keyboard.add(shutdown_button, screenshot_button, offdevices_button, info_button, processes_button)
+    pc_button = types.KeyboardButton('💻 Информация о ПК')
+    keyboard.add(shutdown_button, screenshot_button, offdevices_button, info_button, processes_button, pc_button)
     return keyboard
 
 
@@ -111,7 +112,7 @@ def stop_bot(message):
     else:
         bot.send_message(message.chat.id, "🚷 У вас нет прав доступа к боту.", reply_markup=create_keyboard())
 
-@bot.message_handler(commands=['pc'])
+@bot.message_handler(func=lambda message: message.text.lower() in ['/pc', '💻 информация о пк'])
 def pc_info(message):
     # Информация о процессоре
     cpu_info = platform.processor()
