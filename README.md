@@ -1,53 +1,47 @@
-# Телеграм-бот для управления компьютером 🤖
+# Telegram PC Control Bot
 
-Этот репозиторий содержит исходный код телеграм-бота, созданного для удаленного управления компьютером под Windows. Бот, используя библиотеку Telebot, предоставляет различные функции, позволяя пользователям выполнять задачи и получать информацию через команды в Телеграме.
+This Python script serves as a Telegram bot for controlling and monitoring a Windows PC. It allows users to perform various actions, such as shutting down the computer, taking screenshots, terminating processes, opening URLs, and more. The bot also provides information about the PC's hardware, active processes, and system usage.
+Features
 
-## Основные фишки:
+Process Monitoring: The bot monitors the creation of new processes and logs when a user starts an application.
+Remote Control: Users can perform actions like shutting down the PC, taking screenshots, and terminating processes remotely via Telegram commands.
+PC Information: The bot provides detailed information about the connected PC, including processor details, RAM usage, disk information, network usage, and system uptime.
+Interactive Process List: Users can view and navigate through a paginated list of active processes, including their names and memory usage.
 
-  **Мониторинг процессов 🔄:**
-        Реагирует на запуск новых процессов и делится этой информацией.
-        Команда (/processes) выводит список и позволяет навигироваться по активным процессам.
-        Позволяет завершить определенные процессы с использованием команды (/terminate {имя_процесса}) и открывать опредленные приложения с использованием команды (/open {название}).
+## Installation and Configuration
 
-  **Управление системой 💻:**
-        Позволяет выключить компьютер (/off), сделать скриншот рабочего стола (/screenshot) и заблокировать вводные устройства (/off_devices).
+Clone the repository to your local machine.
 
-  **Симуляция ошибок ✨:**
-        Создает фейковые сообщения об ошибках на экране с помощью команды (/error {текст}).
+`git clone https://github.com/yourusername/telegram-pc-control-bot.git`
 
-  **Открытие URL 🌐:**
-        Открывает URL-адреса в браузере по умолчанию с использованием команды (/url {URL})
-        
-  **Сообщения о запуске и выключении 💤:**
-        Отправляет сообщения при включении и выключении компьютера.
+Install the required Python packages.
 
-  **Авторизация 💂‍♂️:**
-        Гарантирует доступ и управление ботом только для авторизованных пользователей.
+`pip install -r requirements.txt`
 
-  **Получение важной и не важной инфорамации о компьютере 💻:**
-        Позволяет узнать информацию о компьютере и его состоянии с использованием команды (/pc)
+Edit a config.py file with your Telegram bot token (TOKEN) and authorized ID (AUTHORIZED_ID).
 
-## **Совет от автора:**
+Run the script.
 
-  Автоматизация запуска: Создайте .bat файл с содержанием:
+`python main.py`
 
-```
-@echo off
-start /B pythonw.exe C:\путь_к_репозиторию\main.py
-exit
-```
+## Telegram Commands
 
-  **Добавьте его в автозагрузку для удобного запуска бота при старте системы.**
+  - /start: Display a list of available commands.
+   - /error {text}: Simulate a fake error message.
+   - /screenshot`: Take a screenshot of the desktop.
+   - /off: Shut down the computer.
+   - /off_devices: Disable the keyboard and mouse until the next reboot.
+   - /processes: View a list of active processes interactively.
+   - /url {url}: Open the specified URL in the default web browser.
+   - /terminate {process}: Terminate a specified process.
+   - /open {program}: Open a specified program.
+   - /pc: Display detailed information about the connected PC.
+   - /stop: Stop the bot and exit the script.
 
-## Как использовать:
-  1. Установите необходимые библиотеки ```pip install -r requirements.txt```
-  2. Настройте файл config.py с вашим токеном и идентификатором в Телеграме.
-  3. Запустите основной скрипт (main.py).
+### Contributions and Issues
 
-Примечание:
+__Feel free to contribute to the project by submitting pull requests or opening issues. If you encounter any problems or have suggestions for improvement, please let us know.__
 
-    Убедитесь, что установлены все нужные библиотеки и зависимости.
-    Используйте бот с умом и с учетом возможных последствий в области безопасности.
+###### Disclaimer
 
-###### Отказ от ответственности:
-###### Этот проект предназначен для образовательных и развлекательных целей. Пожалуйста, используйте функции бота с умом и в соответствии с этическими нормами. Авторы репозитория не несут ответственности за возможное неправомерное использование или несанкционированный доступ.
+###### *This script is intended for educational purposes and should be used responsibly. The author is not responsible for any misuse or damage caused by using this script.*
