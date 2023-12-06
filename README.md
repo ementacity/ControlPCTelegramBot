@@ -12,7 +12,7 @@ Interactive Process List: Users can view and navigate through a paginated list o
 
 Clone the repository to your local machine.
 
-`git clone https://github.com/yourusername/telegram-pc-control-bot.git`
+`git clone https://github.com/wetakor/ControlPCTelegramBot`
 
 Install the required Python packages.
 
